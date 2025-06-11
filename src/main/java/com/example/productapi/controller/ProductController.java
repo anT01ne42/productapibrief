@@ -7,7 +7,10 @@ package com.example.productapi.controller;
 
 import com.example.productapi.model.Product;
 import com.example.productapi.repository.ProductRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.*;
 
 @RestController
@@ -23,7 +26,11 @@ public class ProductController {
    }
    @GetMapping("/{id}")
    public Product getById(@PathVariable Long id) {
-	  return repository.findById(id).orElseThrow();
+	  return repository.findById(id)
+			  .orElseThrow(() -> new ResponseStatusException(
+					  HttpStatus.NOT_FOUND,
+					  "Product with ID " + id + " not found"
+			  ));
    }
    @PostMapping
    public Product create(@RequestBody Product product) {
@@ -49,6 +56,14 @@ public class ProductController {
 	  copy.setPrice(existing_product.getPrice());
 	  return create(copy);
    }
+
+   //Pour le bundle (messages d'erreurs):
+   @ResponseStatus(HttpStatus.BAD_REQUEST)
+   @ExceptionHandler(IllegalStateException.class)
+	  public String handleIllegalState(IllegalStateException ex) {
+		 return ex.getMessage();
+	  }
+
    //Ajout méthode BUNDLE et prévention des cycles
    @PostMapping("/bundle")
    public Product createBundle(@RequestBody Long[] productIds) {
