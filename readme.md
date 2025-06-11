@@ -10,6 +10,8 @@ A Spring Boot REST API for managing products, including features for product man
 - Spring Data JPA
 - H2 Database (in-memory)
 - Maven
+- SpringDoc OpenAPI UI 2.8.9 (for API documentation)
+
 
 ## Features
 
@@ -119,3 +121,24 @@ http://localhost:8080/products/{id}`
 
 `curl -X POST http://localhost:8080/products/bundle -H "Content-Type: application/json" -d '[1,2,3]'`
 
+## Testing
+
+The application uses Spring MockMvc for integration testing, featuring:
+- Full integration tests with Spring context
+- HTTP request/response testing
+- JSON content validation
+- Response status verification
+- Collection size and content assertions
+
+Test coverage includes:
+- CRUD operations
+- Product duplication
+- Bundle creation and validation
+- Error handling scenarios
+
+## Error Handling
+
+The API includes proper error handling for common scenarios:
+- 404 NOT_FOUND: When requested product doesn't exist
+- 400 BAD_REQUEST: For invalid bundle creation attempts
+- Custom error messages for better client understanding
